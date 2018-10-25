@@ -23,19 +23,19 @@ const config = {
 				test: /\.vue$/,
 				use: ['vue-loader']
 			},
-			// {
-            //     test: /\.js$/,
-            //     include: [
-            //         path.resolve(__dirname, "src"),
-            //         require.resolve("vx-easyui")
-            //     ],
-			// 	use: [{
-            //         loader: 'babel-loader',
-			// 		options: {
-			// 			plugins: ['syntax-dynamic-import']
-			// 		}
-			// 	}],
-			// },
+			{
+                test: /\.js$/,
+                include: [
+                    path.resolve(__dirname, "src"),
+                    require.resolve("vx-easyui")
+                ],
+				use: [{
+                    loader: 'babel-loader',
+					options: {
+						plugins: ['syntax-dynamic-import']
+					}
+				}],
+			},
 			{
 				test: /\.json$/,
 				use: ['json-loader']
@@ -59,7 +59,56 @@ const config = {
                 use: [{
                     loader: 'url-loader'
                 }]
-			}
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                            minimize: true //css压缩
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: function () {
+                                return [
+                                    require('autoprefixer')({
+                                        "browsers": "last 5 version"
+                                    })
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }, {
+                test: /\.less$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: function () {
+                                return [
+                                    require('autoprefixer')({
+                                        "browsers": "last 5 version"
+                                    })
+                                ]
+                            }
+                        }
+                    },
+                    'less-loader'
+                ]
+            }
 		]
     },
     resolve: {
@@ -119,152 +168,6 @@ if (isDev) {
 		new webpack.HotModuleReplacementPlugin(), //HMR
 		new webpack.NoEmitOnErrorsPlugin()
 	)
-	config.module.rules.push({
-		test: /\.css$/,
-		use: [
-			'style-loader',
-			{
-				loader: 'css-loader',
-				options: {
-					importLoaders: 1,
-					minimize: true //css压缩
-				}
-			},
-			{
-				loader: 'postcss-loader',
-				options: {
-					plugins: function () {
-						return [
-							require('autoprefixer')({
-								"browsers": "last 5 version"
-							})
-						]
-					}
-				}
-			}
-		]
-	}, {
-		test: /\.(scss)$/,
-		use: [{
-			loader: 'style-loader',
-		}, {
-			loader: 'css-loader',
-		}, {
-			loader: 'postcss-loader',
-			options: {
-				plugins: function () {
-					return [
-						require('precss'),
-						require('autoprefixer')
-					];
-				}
-			}
-		}, {
-			loader: 'sass-loader' // compiles Sass to CSS
-		}]
-	}, {
-		test: /\.less$/,
-		use: [
-			'style-loader',
-			{
-				loader: 'css-loader',
-				options: {
-					importLoaders: 1
-				}
-			},
-			{
-				loader: 'postcss-loader',
-				options: {
-					plugins: function () {
-						return [
-							require('autoprefixer')({
-								"browsers": "last 5 version"
-							})
-						]
-					}
-				}
-			},
-			'less-loader'
-		]
-	});
-} else { //生产模式
-	config.plugins.push(
-		new ExtractTextPlugin('css/common-[hash:8].css')
-	)
-	config.module.rules.push({
-		test: /\.css$/,
-		use: ExtractTextPlugin.extract({
-			fallback: 'style-loader',
-			use: [{
-					loader: 'css-loader',
-					options: {
-						importLoaders: 1,
-						minimize: true //css压缩
-					}
-				},
-				{
-					loader: 'postcss-loader',
-					options: {
-						plugins: function () {
-							return [
-								require('autoprefixer')({
-									"browsers": "last 5 version"
-								})
-							]
-						}
-					}
-				}
-			]
-		})
-	}, {
-		test: /\.(scss)$/,
-		use: ExtractTextPlugin.extract({
-			fallback: 'style-loader',
-			use: [{
-					loader: 'css-loader',
-					options: {
-						importLoaders: 1
-					}
-				},
-				{
-					loader: 'postcss-loader',
-					options: {
-						plugins: function () {
-							return [
-								require('autoprefixer')({
-									"browsers": "last 5 version"
-								})
-							]
-						}
-					}
-				}, 'sass-loader'
-			]
-		})
-	}, {
-		test: /\.less$/,
-		use: ExtractTextPlugin.extract({
-			fallback: 'style-loader',
-			use: [{
-					loader: 'css-loader',
-					options: {
-						importLoaders: 1
-					}
-				},
-				{
-					loader: 'postcss-loader',
-					options: {
-						plugins: function () {
-							return [
-								require('autoprefixer')({
-									"browsers": "last 5 version"
-								})
-							]
-						}
-					}
-				}, 'less-loader'
-			]
-		})
-	});
 }
 
 module.exports = config;
