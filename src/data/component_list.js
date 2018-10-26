@@ -22,7 +22,7 @@ const data = [
     {
         id: 4,
         name: '面板（panel）',
-        url: '/panel'
+        url: '/my_panel'
     },
     {
         id: 5,
@@ -53,11 +53,6 @@ const data = [
         id: 10,
         name: '弹框（modal）',
         url: '/modal'
-    },
-    {
-        id: 11,
-        name: '面板（panel）',
-        url: '/panel'
     },
     {
         id: 12,

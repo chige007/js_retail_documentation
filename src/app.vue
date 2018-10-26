@@ -220,7 +220,7 @@ export default {
         padding: 15px;
         overflow: auto;
         .loadingTips{
-            .loadingTips(40px);
+            .loadingTips(13px);
         }
 	}
 }
