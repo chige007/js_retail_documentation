@@ -3,7 +3,7 @@
 		<div class="header">
 			<div class="logo">
 				<img src="./images/zyLogo_32_min.png" alt="logo">
-				<span class="title">零售担保业务系统前端开发文档</span>
+				<span class="title">前端开发文档(零售担保)</span>
 			</div>
 		</div>
 		<div class="leftMenus">
@@ -22,9 +22,9 @@
 			</ul>
 		</div>
 		<div class="contentWrap">
-            <router-view  @viewIn="viewIn" @addProvider="addProvider" @deleteProvider="deleteProvider"></router-view>
+            <router-view  @viewIn="viewIn"></router-view>
             <div v-show="showRouterViewLoading" class="loadingTips">
-                <i class="fa fa-circle-o-notch fa-pulse"></i>
+                <i class="fa fa-circle-o-notch fa-pulse">加载中...</i>
             </div>
 		</div>
 	    <div id="global_loadingBox">
@@ -53,20 +53,14 @@
 
 <script>
 import util from './modules/util';
+import component_list from './data/component_list.js';
 export default {
 	data () {
 		return {
             acitiveMenuId: 0,
             showRouterViewLoading: true,
             keyword_menu: '',
-			menus: [
-                {
-                    id: 0,
-                    icon: 'fa fa-home',
-                    name: '首页',
-                    url: '/home'
-                }
-            ]
+			menus: component_list
 		}
     },
 	methods: {
@@ -189,7 +183,7 @@ export default {
                     text-overflow: ellipsis;
 					height: 44px;
 					line-height: 44px;
-					padding: 0px 20px 0px 10px;
+					padding: 0px 20px 0px 15px;
 					color: #b8c7ce;
 					font-size: @fontL;
 					.animation();

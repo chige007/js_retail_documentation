@@ -1,6 +1,6 @@
 <template>
     <div>
-        首页放一些统计图表
+        欢迎您！
     </div>
 </template>
 
@@ -14,7 +14,6 @@ export default {
     }
 }
 </script>
-
 
 <style lang="less" scoped>
 @import "../styles/init.less";

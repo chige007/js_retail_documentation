@@ -41,7 +41,8 @@ const config = {
 				use: ['vue-loader']
 			},
 			{
-				test: /\.js$/,
+                test: /\.js$/,
+                exclude: /(node_modules)/,
                 include: [
                     path.resolve(__dirname, "src"),
                     require.resolve("bootstrap-vue")
@@ -54,11 +55,13 @@ const config = {
 				}],
 			},
 			{
-				test: /\.json$/,
+                test: /\.json$/,
+                exclude: /(node_modules)/,
 				use: ['json-loader']
 			},
 			{
-				test: /\.html$/,
+                test: /\.html$/,
+                exclude: /(node_modules)/,
 				use: ['html-loader']
 			},
             {
