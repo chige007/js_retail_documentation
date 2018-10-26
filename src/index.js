@@ -1,20 +1,29 @@
-import Vue from 'vue';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import routes from './router.config'
 
-import 'vx-easyui/dist/themes/gray/easyui.css';
-import 'vx-easyui/dist/themes/icon.css';
-import 'vx-easyui/dist/themes/vue.css';
-import EasyUI from 'vx-easyui';
-import locale from 'vx-easyui/dist/locale/easyui-lang-zh_CN'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import app from './app.vue';
-import './styles/common.less';
+import directives from './components/directives'
+import filters from './components/filters'
+import app from './app.vue'
+import './styles/common.less'
+import './styles/animation.less'
 
-Vue.use(EasyUI, {
-    locale: locale
+const router = new VueRouter({
+    linkActiveClass: 'active',
+    routes: routes
 });
+Vue.use(VueRouter);
+Vue.use(BootstrapVue);
+Vue.use(directives);
+Vue.use(filters);
 
 new Vue({
     el : "#MYAPP",
+	router: router,
 	data : () => {
         return {
         }

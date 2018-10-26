@@ -1,23 +1,21 @@
 {
-  "name": "js_retail_documentation",
+  "name": "mycomponent_bootstrap",
   "version": "1.0.0",
-  "description": "",
+  "description": "前端组件库",
   "main": "index.js",
+  "babel": {
+    "presets": [
+      "latest"
+    ],
+    "plugins": []
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "devServer": "cross-env NODE_ENV=development webpack-dev-server --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chige007/js_retail_documentation.git"
-  },
-  "author": "chenyuchi",
+  "author": "chenyc",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/chige007/js_retail_documentation/issues"
-  },
-  "homepage": "https://github.com/chige007/js_retail_documentation#readme",
   "devDependencies": {
     "webpack-dev-server": "^3.1.4"
   },
@@ -28,6 +26,8 @@
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
+    "bootstrap": "^4.1.3",
+    "bootstrap-vue": "^2.0.0-rc.11",
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.1.5",
     "css-loader": "^0.28.11",
@@ -35,19 +35,24 @@
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "jquery": "^1.12.4",
     "json-loader": "^0.5.7",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
+    "node-sass": "^4.9.2",
+    "popper.js": "^1.14.3",
     "postcss-loader": "^2.1.5",
     "precss": "^3.1.2",
     "prismjs": "^1.15.0",
+    "sass-loader": "^1.0.4",
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
-    "vue": "^2.5.17",
-    "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.5.17",
-    "vx-easyui": "^1.0.7",
-    "webpack": "^4.23.0",
-    "webpack-cli": "^3.1.2"
+    "vue": "^2.5.16",
+    "vue-loader": "^15.0.11",
+    "vue-router": "^3.0.1",
+    "vue-style-loader": "^4.1.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.3"
   }
 }

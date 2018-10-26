@@ -7,31 +7,48 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');//打包删除旧文�
 
 const isDev = process.env.NODE_ENV === "development"; //判断是否为开发模式
 
+// postcss-loader的配置
+const postcss_loader_options = {
+    plugins: function () {
+        return [
+            require('autoprefixer')({
+                "browsers": "last 5 version"
+            })
+        ]
+    }
+}
+// css-loader的配置
+const css_loader_options = {
+    importLoaders: 1,
+    minimize: isDev ? false : true
+}
+
 const config = {
 	devtool: false,
 	entry: { //入口配置
-		index: path.join(__dirname, 'src/index.js') //入口js文件
+		'index': path.join(__dirname, 'src/index.js') //入口js文件
 	},
 	output: { //输出配置
 		path: path.join(__dirname, 'dist'), //输出路径
-		//      publicPath: '/',//发布路径前缀
+        // publicPath: 'js',//发布路径前缀
 		filename: 'js/[name].js', //输出文件名+哈希值
-		chunkFilename: 'js/chunks/[name]-[chunkhash:8].js'
+		chunkFilename: 'js/chunks/[name]-[chunkhash:8].js'//分块输出
 	},
 	module: {
-		rules: [{
+		rules: [
+            {
 				test: /\.vue$/,
 				use: ['vue-loader']
 			},
 			{
-                test: /\.js$/,
+				test: /\.js$/,
                 include: [
                     path.resolve(__dirname, "src"),
-                    require.resolve("vx-easyui")
+                    require.resolve("bootstrap-vue")
                 ],
 				use: [{
                     loader: 'babel-loader',
-					options: {
+					options: {//配合路由分块输出的配置
 						plugins: ['syntax-dynamic-import']
 					}
 				}],
@@ -59,68 +76,14 @@ const config = {
                 use: [{
                     loader: 'url-loader'
                 }]
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 1,
-                            minimize: true //css压缩
-                        }
-                    },
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: function () {
-                                return [
-                                    require('autoprefixer')({
-                                        "browsers": "last 5 version"
-                                    })
-                                ]
-                            }
-                        }
-                    }
-                ]
-            }, {
-                test: /\.less$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 1
-                        }
-                    },
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: function () {
-                                return [
-                                    require('autoprefixer')({
-                                        "browsers": "last 5 version"
-                                    })
-                                ]
-                            }
-                        }
-                    },
-                    'less-loader'
-                ]
-            }
+			}
 		]
-    },
-    resolve: {
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
-        }
-    },
+	},
 	plugins: [
 		//把模式变量添加到webpack全局变量中
 		new webpack.DefinePlugin({
 			'process.env': {
-				NODE_ENV: isDev ? '"development"' : '"production"'
+                NODE_ENV: isDev ? '"development"' : '"production"'
 			}
 		}),
 		new HtmlWebpackPlugin({ //生成html插件
@@ -138,8 +101,12 @@ const config = {
 			},
 			inject: 'body' //script标签插入的位置（head,body,false）
 		}),
+		new webpack.ProvidePlugin({//引入jquery
+			jQuery: 'jquery',
+			$: 'jquery'
+		}),
 		new VueLoaderPlugin(), //渲染vue模板插件
-		new CleanWebpackPlugin(['dist/js/*.js','dist/js/chunks/*.js', 'dist/css/*.css'], {
+		new CleanWebpackPlugin(['dist/js/*.js','dist/js/chunks/*.js', 'dist/css/*.css'], {//打包前删除原来的文件
 			root: __dirname,//根目录
 			verbose: true,//开启在控制台输出信息
 			dry: false//启用删除文件
@@ -149,7 +116,7 @@ const config = {
 //开发模式
 if (isDev) {
 	//调试模式
-	config.devtool = '#cheap-module-eval-source-map'
+	config.devtool = '#cheap-module-eval-source-map';
 	//调试服务器
 	config.devServer = {//本地服务器配置
 		port: "8089", //端口号
@@ -160,7 +127,6 @@ if (isDev) {
 		contentBase: "./dist", //本地服务器所加载的页面所在的目录
 		historyApiFallback: true, // 任意的 404 响应都替代为 index.html
         hot: true // 启用 webpack 的模块热替换特
-        // inline: true// 启用内联模式
 	}
 	//	添加热加载插件
 	config.plugins.push(
@@ -168,6 +134,103 @@ if (isDev) {
 		new webpack.HotModuleReplacementPlugin(), //HMR
 		new webpack.NoEmitOnErrorsPlugin()
 	)
+	config.module.rules.push({
+		test: /\.css$/,
+		use: [
+			'style-loader',
+			{
+				loader: 'css-loader',
+				options: css_loader_options
+			},
+			{
+				loader: 'postcss-loader',
+				options: postcss_loader_options
+			}
+		]
+	}, {
+		test: /\.(scss)$/,
+		use: [
+            'style-loader',
+            {
+                loader: 'css-loader',
+                options: css_loader_options
+            }, 
+            {
+                loader: 'postcss-loader',
+                options: postcss_loader_options
+            },
+            'sass-loader'
+		]
+	}, {
+		test: /\.less$/,
+		use: [
+			'style-loader',
+			{
+				loader: 'css-loader',
+				options: css_loader_options
+			},
+			{
+				loader: 'postcss-loader',
+				options: postcss_loader_options
+			},
+			'less-loader'
+		]
+	});
+} else { //生产模式
+	config.plugins.push(
+		new ExtractTextPlugin({
+            filename: 'css/common-[hash:8].css',//输出css名称
+            allChunks: true////分块输出需配置
+        })
+	)
+	config.module.rules.push({
+		test: /\.css$/,
+		use: ExtractTextPlugin.extract({//css分离打包
+			fallback: 'style-loader',
+			use: [
+                {
+					loader: 'css-loader',
+					options: css_loader_options
+				},
+				{
+					loader: 'postcss-loader',
+					options: postcss_loader_options
+				}
+			]
+		})
+	}, {
+		test: /\.(scss)$/,
+		use: ExtractTextPlugin.extract({
+			fallback: 'style-loader',
+			use: [
+                {
+					loader: 'css-loader',
+					options: css_loader_options
+				},
+				{
+					loader: 'postcss-loader',
+					options: postcss_loader_options
+                }, 
+                'sass-loader'
+			]
+		})
+	}, {
+		test: /\.less$/,
+		use: ExtractTextPlugin.extract({
+			fallback: 'style-loader',
+			use: [
+                {
+					loader: 'css-loader',
+					options: css_loader_options
+				},
+				{
+					loader: 'postcss-loader',
+					options: postcss_loader_options
+                }, 
+                'less-loader'
+			]
+		})
+	});
 }
 
 module.exports = config;
